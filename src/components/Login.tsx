@@ -1,25 +1,26 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const [isRegister, setIsRegister] = useState<boolean>(false);
+
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
+
+  const { login, register, error } = useAuth();
 
   const handleSubmit = async (ev: React.FormEvent) => {
     ev.preventDefault();
 
     try {
       if (isRegister) {
-        // Registrar usuário
-        console.log(name, email, password);
+        await register(name, email, password);
       } else {
-        // Login de usuário
-        console.log(email, password);
+        await login(email, password);
       }
     } catch (error) {
-      setError('Erro ao enviar formulário.');
+      console.error('Erro ao enviar formulário.', error);
     }
   }
 
@@ -55,6 +56,7 @@ const Login: React.FC = () => {
               className="p-3 border rounded-md outline-neutral-600 bg-neutral-50"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
+              minLength={3}
             />
           </div>
           <div className="flex flex-col">
@@ -68,6 +70,7 @@ const Login: React.FC = () => {
               className="p-3 border rounded-md outline-neutral-600 bg-neutral-50"
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
+              minLength={6}
             />
           </div>
           {error && <span className="text-[#BF3F46] text-sm font-medium h-3.5">{error}</span>}
