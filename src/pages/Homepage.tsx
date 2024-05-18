@@ -1,4 +1,4 @@
-import Login from "./Login";
+import Login from "../components/Login";
 
 import homeImage from '../assets/home-unsplash.avif';
 
