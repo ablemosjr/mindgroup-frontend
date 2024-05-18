@@ -12,9 +12,10 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/home" element={<Homepage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/products" element={<Dashboard />} />
+          {/* <Route path="/products" element={<Dashboard />} /> */}
           <Route path="*" element={<Homepage />} />
         </Route>
+        <Route path="/products" element={<Dashboard />} />
       </Routes>
     </AuthProvider>
   )

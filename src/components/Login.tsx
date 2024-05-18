@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import Button from "./LinkButton";
 
 const Login: React.FC = () => {
   const [isRegister, setIsRegister] = useState<boolean>(false);
@@ -77,17 +78,17 @@ const Login: React.FC = () => {
         </div>
         
         <button type="submit"
-          className="uppercase py-3 w-[60%] rounded-sm shadow-lg font-bold text-white tracking-widest gradient-color hover:brightness-110 active:scale-105"
+          className="uppercase py-3 w-[60%] font-bold button gradient-color"
         >{isRegister ? 'Registrar' : 'Login'}
         </button>
 
-        <span className="cursor-pointer text-sm font-light hover:font-semibold" onClick={() => setIsRegister(!isRegister)}>
-          {isRegister ? 
-            'Já possui uma conta? Faça login!' 
-            : 
-            'Não está cadastrado? Registre-se aqui.'
-          }
-        </span>
+        <Button onClick={() => setIsRegister(!isRegister)}
+        title={isRegister ? 
+          'Já possui uma conta? Faça login!' 
+          : 
+          'Não está cadastrado? Registre-se aqui.'
+        }
+        />
       </form>
     </section>
   )

@@ -9,3 +9,32 @@
   background: linear-gradient(42deg, rgba(211,15,122,1) 18%, rgba(0,128,201,1) 78%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#d30f7a",endColorstr="#0080c9",GradientType=1);
 }
+
+.slice-text:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  height: 2px;
+  width: 100%;
+  background: rgb(211,15,122);
+  background: -moz-linear-gradient(42deg, rgba(211,15,122,1) 18%, rgba(0,128,201,1) 78%);
+  background: -webkit-linear-gradient(42deg, rgba(211,15,122,1) 18%, rgba(0,128,201,1) 78%);
+  background: linear-gradient(42deg, rgba(211,15,122,1) 18%, rgba(0,128,201,1) 78%);
+}
+
+.button {
+  border-radius: .125rem;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  color: #FFF;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button:active {
+  transform: scale(1.05);
+}
