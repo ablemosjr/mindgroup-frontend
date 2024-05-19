@@ -3,8 +3,10 @@ import LinkButton from '../components/LinkButton';
 import CardProduct from '../components/CardProduct';
 import Modal from '../components/Modal';
 import { Product } from '../types/Product';
+import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
+  const { logout } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -122,7 +124,11 @@ const Dashboard = () => {
     <main className="p-5 max-w-[1000px] mx-auto">
       <header className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-neutral-600">Meus produtos</h1>
-        <LinkButton title={"Histórico"} />
+
+        <div className="flex gap-2">
+          <LinkButton title={"Histórico"} />
+          <LinkButton title={"Logout"} onClick={logout} />
+        </div>
       </header>
 
       <section className=" mt-10">
@@ -135,7 +141,7 @@ const Dashboard = () => {
         >Adicionar produto
         </button>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {products.length > 0 ? (
             products.map(prod => (
               <CardProduct 
