@@ -1,8 +1,15 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
+interface IUser {
+  id: number;
+  name: string;
+  email: string;
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
+  user: IUser | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -14,6 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const navigate = useNavigate();
 
   const login = async (email: string, password: string) => {
@@ -25,7 +33,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       });
 
       if (response.ok) {
+        const data = await response.json();
+
         setIsAuthenticated(true);
+        setUser(data.user);
         setError(null);
         navigate('/products');
       } else {
@@ -49,7 +60,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       });
       
       if (response.ok) {
+        const data = await response.json();
+        
         setIsAuthenticated(true);
+        setUser(data.user);
         setError(null);
         navigate('/products');
       } else {
@@ -70,7 +84,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, register, error }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, register, error }}>
       {children}
     </AuthContext.Provider>
   )

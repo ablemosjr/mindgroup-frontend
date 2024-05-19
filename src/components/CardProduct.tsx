@@ -14,6 +14,10 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
         <div className="text-neutral-700 my-4 min-[475px]:my-0">
           <h2 className="uppercase font-medium ">{product.name}</h2>
           <p className="font-light">{product.description}</p>
+          <div className="my-1">
+            <span className="text-neutral-700 font-medium">R$ {product.price}</span>
+            <span className="ml-4">Quantidade: {product.quantity}</span>
+          </div>
         </div>
         <div className="flex flex-row items-center justify-between">
           <span className="font-light text-neutral-500">id: {product.id}</span>
