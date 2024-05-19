@@ -133,7 +133,7 @@ const Dashboard = () => {
 
           <History 
             isOpen={openSidebar} 
-            setOpen={setOpenSidebar} 
+            setOpen={setOpenSidebar}
           />
         </div>
       </header>
