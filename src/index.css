@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Outfit', sans-serif;
+}
+
 .gradient-color {
   background: rgb(211,15,122);
   background: -moz-linear-gradient(42deg, rgba(211,15,122,1) 18%, rgba(0,128,201,1) 78%);

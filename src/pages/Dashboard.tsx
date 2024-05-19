@@ -4,11 +4,13 @@ import CardProduct from '../components/CardProduct';
 import Modal from '../components/Modal';
 import { Product } from '../types/Product';
 import { useAuth } from '../context/AuthContext';
+import History from '../components/History';
 
 const Dashboard = () => {
   const { logout } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
@@ -126,8 +128,13 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold text-neutral-600">Meus produtos</h1>
 
         <div className="flex gap-2">
-          <LinkButton title={"Histórico"} />
+          <LinkButton title={"Histórico"} onClick={() => setOpenSidebar(!openSidebar)} />
           <LinkButton title={"Logout"} onClick={logout} />
+
+          <History 
+            isOpen={openSidebar} 
+            setOpen={setOpenSidebar} 
+          />
         </div>
       </header>
 
