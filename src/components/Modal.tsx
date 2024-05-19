@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "../types/Product";
 import { useAuth } from "../context/AuthContext";
 
@@ -6,16 +6,33 @@ interface ModalProps {
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
   title: string;
-  onCreate: (formData: Omit<Product, 'id'>) => void;
+  onSubmit: (formData: Omit<Product, 'id'>) => void;
+  initialData?: Product | null;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, setOpen, title, onCreate }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, setOpen, title, onSubmit, initialData }) => {
   const { user } = useAuth();
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [image, setImage] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setDescription(initialData.description || '');
+      setImage(initialData.image || '');
+      setPrice(initialData.price);
+      setQuantity(initialData.quantity);
+    } else {
+      setName('');
+      setDescription('');
+      setImage('');
+      setPrice(0);
+      setQuantity(0);
+    }
+  },[initialData]);
 
   const handleSave = async (ev: React.FormEvent) => {
     ev.preventDefault();
@@ -30,7 +47,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setOpen, title, onCreate }) => {
         userId: user.id
       }
   
-      onCreate(formData);
+      onSubmit(formData);
       setOpen(false);
     }
   }

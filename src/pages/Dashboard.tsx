@@ -7,6 +7,7 @@ import { Product } from '../types/Product';
 const Dashboard = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     getProducts();
@@ -24,15 +25,21 @@ const Dashboard = () => {
   }
 
   const handleSubmit = async (formData: Omit<Product, 'id'>) => {
-    const existProduct = products.find(prod => prod.name === formData.name);
-
-    if (existProduct) {
-      const newQuantity = existProduct.quantity + formData.quantity;
-      await updateProduct(existProduct.id, newQuantity);
+    if (selectedProduct) {
+      await updateProduct(selectedProduct.id, formData);
     } else {
-      await addProduct(formData);
+      const existProduct = products.find(prod => prod.name === formData.name);
+
+      if (existProduct) {
+        const newQuantity = existProduct.quantity + formData.quantity;
+        await existingProduct(existProduct.id, newQuantity);
+      } else {
+        await addProduct(formData);
+      }
     }
 
+    setSelectedProduct(null);
+    setOpenModal(false);
     getProducts();
   }
 
@@ -42,7 +49,12 @@ const Dashboard = () => {
     getProducts();
   }
 
-  const updateProduct = async (id: number, newQuantity: number) => {
+  const handleEdit = async (product: Product) => {
+    setSelectedProduct(product);
+    setOpenModal(true);
+  }
+
+  const existingProduct = async (id: number, newQuantity: number) => {
     try {
       const response = await fetch(`http://localhost:3000/products/${id}`, {
         method: 'PUT',
@@ -51,7 +63,7 @@ const Dashboard = () => {
       });
 
       if (!response.ok) {
-        console.log('Erro ao atualizar quantidade do produto.')
+        console.log('Erro ao atualizar quantidade do produto.');
       }
 
     } catch (error) {
@@ -89,6 +101,23 @@ const Dashboard = () => {
     }
   }
 
+  const updateProduct = async (id: number, updatedProduct: Omit<Product, 'id'>) => {
+    try {
+      const response = await fetch(`http://localhost:3000/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedProduct)
+      });
+
+      if (!response.ok) {
+        console.log('Erro ao atualizar produto.');
+      }
+
+    } catch (error) {
+      console.error('Erro ao atualizar produto:', error);
+    }
+  }
+
   return (
     <main className="p-5 max-w-[1000px] mx-auto">
       <header className="flex items-center justify-between">
@@ -99,14 +128,22 @@ const Dashboard = () => {
       <section className=" mt-10">
         <button type="button"
           className="py-2 px-4 button gradient-color mb-5"
-          onClick={() => setOpenModal(!openModal)}
+          onClick={() => {
+            setOpenModal(!openModal);
+            setSelectedProduct(null);
+          }}
         >Adicionar produto
         </button>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {products.length > 0 ? (
             products.map(prod => (
-              <CardProduct key={prod.id} product={prod} onDelete={handleDelete} />
+              <CardProduct 
+                key={prod.id} 
+                product={prod} 
+                onDelete={handleDelete} 
+                onEdit={handleEdit}
+              />
             ))
           ) : (
             <h1 className="text-xl text-neutral-800 font-medium mt-10">Não foi encontrado nenhum produto.</h1>
@@ -115,9 +152,10 @@ const Dashboard = () => {
       </section>
 
       <Modal
-        title={'Adicionar Produto'} 
+        title={selectedProduct ? 'Editar Produto' : 'Adicionar Produto'} 
         isOpen={openModal} setOpen={setOpenModal}
-        onCreate={handleSubmit} 
+        onSubmit={handleSubmit} 
+        initialData={selectedProduct}
       />
     </main>
   )

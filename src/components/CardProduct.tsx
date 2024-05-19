@@ -5,12 +5,15 @@ import LinkButton from './LinkButton';
 interface CardProductProps {
   product: Product;
   onDelete: (id: number) => void;
+  onEdit: (product: Product) => void;
 }
 
-const CardProduct: React.FC<CardProductProps> = ({ product, onDelete }) => {
+const CardProduct: React.FC<CardProductProps> = ({ product, onDelete, onEdit }) => {
+  const imageSrc = typeof product.image === 'string' && product.image ? product.image : imageDefault;
+
   return (
     <div className="flex flex-col p-5 bg-neutral-50 border outline-neutral-600 rounded-lg min-[475px]:flex-row min-[475px]:h-[150px]">
-      <img className="rounded-sm min-[475px]:h-full" src={product.image || imageDefault} alt="Imagem não carregada" />
+      <img className="rounded-sm min-[475px]:h-full" src={imageSrc} alt={`Imagem de ${product.name}`} />
       <div className="flex flex-col justify-between min-[475px]:ml-4 w-full">
         <div className="text-neutral-700 my-4 min-[475px]:my-0">
           <h2 className="uppercase font-medium ">{product.name}</h2>
@@ -24,7 +27,7 @@ const CardProduct: React.FC<CardProductProps> = ({ product, onDelete }) => {
           <span className="font-light text-neutral-500">id: {product.id}</span>
 
           <div>
-            <LinkButton title="Editar" />
+            <LinkButton title="Editar" onClick={() => onEdit(product)} />
             <LinkButton title="Excluir" onClick={() => onDelete(product.id)} />
           </div>
         </div>
