@@ -97,7 +97,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setOpen, title, onSubmit, initial
             <div className="flex flex-col">
               <label htmlFor="image"
                 className="font-outfit text-sm text-neutral-600 mb-1"
-              >Imagem:
+              >Imagem URL:
               </label>
               <input id="image"
                 type="url"

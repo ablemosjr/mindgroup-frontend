@@ -17,6 +17,7 @@ const Login: React.FC = () => {
     try {
       if (isRegister) {
         await register(name, email, password);
+        setIsRegister(false);
       } else {
         await login(email, password);
       }

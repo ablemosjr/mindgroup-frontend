@@ -59,13 +59,9 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
         body: JSON.stringify({ name, email, password })
       });
       
-      if (response.ok) {
-        const data = await response.json();
-        
-        setIsAuthenticated(true);
-        setUser(data.user);
-        setError(null);
-        navigate('/products');
+      if (response.ok) {       
+        setIsAuthenticated(false);
+        setError(null); 
       } else {
         const errorData = await response.json();
         
