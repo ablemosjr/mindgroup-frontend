@@ -36,6 +36,12 @@ const Dashboard = () => {
     getProducts();
   }
 
+  const handleDelete = async (id: number) => {
+    await deleteProduct(id);
+
+    getProducts();
+  }
+
   const updateProduct = async (id: number, newQuantity: number) => {
     try {
       const response = await fetch(`http://localhost:3000/products/${id}`, {
@@ -69,6 +75,20 @@ const Dashboard = () => {
     }
   }
 
+  const deleteProduct = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:3000/products/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) {
+        console.error('Erro ao excluir produto.');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir produto:', error);
+    }
+  }
+
   return (
     <main className="p-5 max-w-[1000px] mx-auto">
       <header className="flex items-center justify-between">
@@ -86,7 +106,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {products.length > 0 ? (
             products.map(prod => (
-              <CardProduct key={prod.id} product={prod} />
+              <CardProduct key={prod.id} product={prod} onDelete={handleDelete} />
             ))
           ) : (
             <h1 className="text-xl text-neutral-800 font-medium mt-10">Não foi encontrado nenhum produto.</h1>

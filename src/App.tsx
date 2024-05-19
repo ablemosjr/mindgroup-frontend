@@ -14,6 +14,7 @@ const App: React.FC = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/products" element={<Dashboard />} />
         </Route>
+        <Route path="*" element={<Homepage />} />
       </Routes>
     </AuthProvider>
   )
